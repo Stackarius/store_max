@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:store_max/my_widget/s_button.dart';
 import 'package:store_max/navigation/main_navigation.dart';
-import 'package:store_max/pages/home_page.dart';
 
 import '../contants/colors.dart';
 
