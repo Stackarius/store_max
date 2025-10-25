@@ -157,7 +157,7 @@ class _HomePageState extends State<HomePage> {
                           itemBuilder: (context, index) {
                             final product = _filteredProducts[index];
                             return Hero(
-                              tag: [_filteredProducts[index].name],
+                              tag: product.name,
                               child: ProductCard(product: product),
                             );
                           },
