@@ -77,7 +77,7 @@ class ProductCard extends StatelessWidget {
                     product.name,
                     style: TextStyle(fontWeight: FontWeight.bold),
                     maxLines: 1,
-                    overflow: TextOverflow.fade,
+                    overflow: TextOverflow.ellipsis,
                   ),
                   SizedBox(height: 5),
                   // price
