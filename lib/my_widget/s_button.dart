@@ -3,11 +3,10 @@ import 'package:flutter/material.dart';
 import '../contants/colors.dart';
 
 class SButton extends StatelessWidget {
-  final String? text;
+  final String text;
   final Color? color;
   final Color? textColor;
   const SButton({super.key, required this.text, this.color, this.textColor});
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -17,7 +16,7 @@ class SButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(30),
       ),
       child: Text(
-        text.toString(),
+        text,
         style: TextStyle(
           fontSize: 18,
           fontWeight: FontWeight.bold,
