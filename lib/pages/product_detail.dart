@@ -65,6 +65,7 @@ class _ProductDetailState extends State<ProductDetail> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // TODO: add margin and  a status container
           _buildAppBar(),
           Expanded(child: _buildProductDetails()),
           SafeArea(
@@ -112,7 +113,7 @@ class _ProductDetailState extends State<ProductDetail> {
     final size = MediaQuery.of(context).size;
 
     return Hero(
-      tag: _currentProduct.id ?? _currentProduct.name,
+      tag: 'product-${_currentProduct.id ?? _currentProduct.name}',
       child: Container(
         height: size.height * 0.4,
         width: size.width,
@@ -122,24 +123,52 @@ class _ProductDetailState extends State<ProductDetail> {
             image:
                 _currentProduct.imagePath != null
                     ? FileImage(File(_currentProduct.imagePath!))
-                    : const AssetImage('assets/default.png') as ImageProvider,
+                    : const AssetImage('assets/default.png'),
             fit: BoxFit.cover,
           ),
         ),
         child: Stack(
           children: [
             Positioned(
-              top: 40,
+              top: 65,
               left: 20,
               child: GestureDetector(
                 onTap: () => Navigator.pop(context),
                 child: Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withAlpha(50),
+                        blurRadius: 8,
+                        offset: const Offset(0, 3),
+                      ),
+                    ],
                     color: AppColors.primary.withAlpha(100),
                     shape: BoxShape.circle,
                   ),
                   child: Icon(Icons.arrow_back, color: AppColors.secondary),
+                ),
+              ),
+            ),
+
+            Positioned(
+              top: 60,
+              left: MediaQuery.of(context).size.width / 2.7,
+              child: Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  border: Border.all(width: 2, color: AppColors.secondary),
+                  borderRadius: BorderRadius.circular(30),
+                  color: AppColors.primary.withAlpha(150),
+                ),
+                child: Text(
+                  "@Store Max",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.secondary,
+                  ),
                 ),
               ),
             ),
