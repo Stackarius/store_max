@@ -1,3 +1,5 @@
+
+
 # StoreMax
 
 **A smart inventory management app — built for speed, simplicity, and scale.**
@@ -5,6 +7,15 @@
 StoreMax is a **Flutter-powered inventory & store management app** designed to help small business owners and vendors easily manage their products, track inventory, and streamline operations — all from a clean, modern mobile interface.
 
 It combines **local-first performance** with **Provider-powered state management** and **a smooth, native UI experience**.
+
+---
+
+## 🚀 Download & Demo
+
+**Release APK:** [Download here](https://github.com/Stackarius/store_max/releases/download/Dev/app-release.apk)  
+**Demo Video:** [Google Drive](https://drive.google.com/file/d/16j56S36RH9Ovu1DS9LP3w99Hl3nxdPG_/view?usp=drivesdk)  
+**Live Emulator (Appetize):** [Launch Demo](https://appetize.io/app/b_yxfotmsbtf573pbfgdyr4jacry)  
+**GitHub Repo:** [https://github.com/Stackarius/store_max](https://github.com/Stackarius/store_max)
 
 ---
 
@@ -68,37 +79,7 @@ It combines **local-first performance** with **Provider-powered state management
 
 ## Architecture Overview
 
-```
-lib/
-│
-├── contants/                 # App-wide constants like colors
-│   └── colors.dart
-│
-├── models/                   # Data models
-│   └── product.dart
-│
-├── provider/                 # Provider state management
-│   └── product_provider.dart
-│
-├── pages/                    # All UI screens
-│   ├── home_page.dart
-│   ├── add_edit_product_page.dart
-│   ├── product_detail.dart
-│   ├── profile_page.dart
-│   ├── onboarding_page.dart
-│   └── splash_screen.dart
-│
-├── navigation/               # Main bottom navigation setup
-│   └── main_navigation.dart
-│
-├── utils/                    # Helper functions and initial seeding
-│   └── seed_data.dart
-│
-├── my_widget/                # Reusable widgets
-│   └── s_button.dart
-│
-└── main.dart                 # App entry point
-```
+lib/ │ ├── contants/                 # App-wide constants like colors │   └── colors.dart │ ├── models/                   # Data models │   └── product.dart │ ├── provider/                 # Provider state management │   └── product_provider.dart │ ├── pages/                    # All UI screens │   ├── home_page.dart │   ├── add_edit_product_page.dart │   ├── product_detail.dart │   ├── profile_page.dart │   ├── onboarding_page.dart │   └── splash_screen.dart │ ├── navigation/               # Main bottom navigation setup │   └── main_navigation.dart │ ├── utils/                    # Helper functions and initial seeding │   └── seed_data.dart │ ├── my_widget/                # Reusable widgets │   └── s_button.dart │ └── main.dart                 # App entry point
 
 ---
 
@@ -112,63 +93,62 @@ C --> D[Provider Reloads Product List]
 D --> E[UI Rebuilds with New Data]
 ```
 
----
+Setup Instructions
 
-## Setup Instructions
+1️ Clone the Repo
 
-### 1️ Clone the Repo
+git clone https://github.com/Stackarius/store_max.git
+cd store_max
 
-```bash
-git clone https://github.com/yourusername/storemax.git
-cd storemax
-```
+2️⃣ Install Dependencies
 
-### 2️⃣ Install Dependencies
-
-```bash
 flutter pub get
-```
 
-### 3️⃣ Run the App
+3️⃣ Run the App
 
-```bash
 flutter run
-```
 
-### 4️⃣ (Optional) Regenerate Splash Screen
+4️⃣ (Optional) Regenerate Splash Screen
 
 If you modify branding assets:
 
-```bash
 flutter pub run flutter_native_splash:create
-```
+
 
 ---
 
-## Branding
+Branding
 
-| Asset                 | Path                         | Description              |
-| --------------------- | ---------------------------- | ------------------------ |
-| App Icon              | `assets/images/store.png`    | App logo                 |
-| Splash Background     | `flutter_native_splash.yaml` | Configures native splash |
-| Default Product Image | `assets/images/store.png`    | Fallback image           |
+Asset	Path	Description
 
----
+App Icon	assets/images/store.png	App logo
+Default Product Image	assets/images/store.png	Fallback image
 
-## Future Roadmap
 
-MVP (Offline Inventory)  
- Sync with Cloud Database (Firebase or Supabase)  
- Integrated Payment Gateway (Paystack SDK)  
- Multi-user Collaboration  
- Advanced Analytics Dashboard  
- AI-Powered Inventory Forecasting
 
 ---
 
-## 📦 Dependencies
+🔖 Release Notes
 
-```yaml
+StoreMax v1.0.0 — Offline-first inventory management app built with Flutter, Provider, and Sqflite. Supports full CRUD operations, native camera integration, and persistent local storage.
+
+
+---
+
+Future Roadmap
+
+MVP (Offline Inventory)
+Sync with Cloud Database (Firebase or Supabase)
+Integrated Payment Gateway (Paystack SDK)
+Multi-user Collaboration
+Advanced Analytics Dashboard
+AI-Powered Inventory Forecasting
+
+
+---
+
+📦 Dependencies
+
 dependencies:
   flutter:
     sdk: flutter
@@ -178,27 +158,32 @@ dependencies:
   google_fonts: ^6.2.1
   flutter_native_splash: ^2.4.0
   flutter_animate: ^4.5.0
-```
+
 
 ---
 
-## 🧑‍💻 Developer
+🧑‍💻 Developer
 
-**👨‍💻 Stackr**  
-_Aspiring Tech Founder, Flutter Developer, and Web Enthusiast_  
-Building **StoreMax**, **PaySplitrr**, and other practical apps for the modern Nigerian market.
+👨‍💻 Stackr
+Aspiring Tech Founder, Flutter Developer, and Web Enthusiast
+Building StoreMax, PaySplitrr, and other practical apps for the modern Nigerian market.
 
-- 🐙 [GitHub](www.github.com/Stackarius)
-
+🐙 GitHub (https://www.github.com/Stackarius)
+🐦 X (https://x.com/Stackarius)
+🔗 LinkedIn (https://ng.linkedin.com/in/opeyemidanieladepoju)
 ---
 
-## 🏁 License
+🏁 License
 
-This project is licensed under the **MIT License**.  
+This project is licensed under the MIT License.
 You are free to use, modify, and distribute with attribution.
 
+
 ---
 
-### 💬 Tagline
+💬 Tagline
 
-> _“Because every store deserves a smart system.”_
+> “Because every store deserves a smart system.”
+
+
+---
