@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:store_max/db/database_helper.dart';
 import 'package:store_max/models/product.dart';
-
+import 'package:store_max/pages/product_detail.dart';
 import '../contants/colors.dart';
 import '../my_widget/product_card.dart';
+import '../provider/product_provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -13,19 +15,17 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  // new instance od _dbHelper
   final DatabaseHelper _dbHelper = DatabaseHelper.instance;
-  List<Product> _products = [];
-  List<Product> _filteredProducts = [];
-  bool isLoading = true;
   final TextEditingController _searchController = TextEditingController();
-  //
 
   @override
   void initState() {
     super.initState();
-    _loadProducts();
-    _searchController.addListener(_filterProducts);
+    final provider = Provider.of<ProductProvider>(context, listen: false);
+    provider.loadProducts();
+    _searchController.addListener(() {
+      provider.filterProducts(_searchController.text.trim());
+    });
   }
 
   @override
@@ -34,26 +34,15 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
-  // load products from databse
-  Future<void> _loadProducts() async {
-    setState(() => isLoading = true);
-    final products = await _dbHelper.readAll();
-    setState(() {
-      _products = products;
-      _filteredProducts = products;
-      isLoading = false;
-    });
-  }
+  Future<void> _openProductDetail(BuildContext context, Product product) async {
+    final shouldRefresh = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => ProductDetail(product: product)),
+    );
 
-  // Filter Products
-  void _filterProducts() {
-    final query = _searchController.text.trim().toLowerCase();
-    setState(() {
-      _filteredProducts =
-          _products
-              .where((product) => product.name.toLowerCase().contains(query))
-              .toList();
-    });
+    if (shouldRefresh == true && context.mounted) {
+      Provider.of<ProductProvider>(context, listen: false).loadProducts();
+    }
   }
 
   @override
@@ -64,158 +53,167 @@ class _HomePageState extends State<HomePage> {
           padding: const EdgeInsets.all(20.0),
           child: Column(
             children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: Row(
-                      spacing: 10,
-                      children: [
-                        CircleAvatar(
-                          backgroundImage: AssetImage(
-                            "assets/images/image_1.jpeg",
-                          ),
-                          radius: 25,
-                        ),
-                        Text(
-                          "Welcome Sarah",
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  // actions
-                  Row(
-                    children: [
-                      Card(
-                        color: AppColors.secondary,
-                        child: Badge(
-                          child: IconButton(
-                            onPressed: () {},
-                            icon: Icon(Icons.notifications),
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: 5),
-                      Card(
-                        color: AppColors.secondary,
-                        child: IconButton(
-                          onPressed: () {},
-                          icon: Icon(Icons.settings),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              SizedBox(height: 20),
-              //  SearchBar
-              Row(
-                children: [
-                  _searchBar(context),
-                  SizedBox(width: 5),
-                  Card(
-                    color: AppColors.secondary,
-                    child: IconButton(
-                      onPressed: () {},
-                      icon: Icon(Icons.filter_list),
-                    ),
-                  ),
-                ],
-              ),
-
-              // RECENT INVENTORIES
-              SizedBox(height: 20),
+              _buildTopBar(),
+              const SizedBox(height: 20),
+              _buildSearchBarRow(),
+              const SizedBox(height: 20),
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
                   "Inventory",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
-              SizedBox(height: 15),
-
-              // List of recent inventories
-              Expanded(
-                child:
-                    isLoading
-                        ? Center(child: CircularProgressIndicator())
-                        : _filteredProducts.isEmpty
-                        ? _buildEmptyState(_searchController)
-                        : GridView.builder(
-                          physics: BouncingScrollPhysics(),
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                crossAxisSpacing: 15,
-                                mainAxisSpacing: 15,
-                                childAspectRatio: .75,
-                              ),
-                          itemCount: _filteredProducts.length,
-                          itemBuilder: (context, index) {
-                            final product = _filteredProducts[index];
-                            return Hero(
-                              tag: product.name,
-                              child: ProductCard(product: product),
-                            );
-                          },
-                        ),
-              ),
+              const SizedBox(height: 15),
+              Expanded(child: _buildProductGrid()),
             ],
           ),
         ),
       ),
     );
   }
-}
 
-Widget _searchBar(BuildContext context) {
-  return Container(
-    width: MediaQuery.of(context).size.width / 1.35,
-    decoration: BoxDecoration(
-      color: AppColors.secondary,
-      border: Border.all(width: 2, color: AppColors.myGrey),
-      borderRadius: BorderRadius.circular(25),
-    ),
-    child: TextFormField(
-      textAlignVertical: TextAlignVertical.center,
-      decoration: InputDecoration(
-        prefixIcon: Icon(Icons.search),
-        hintText: "Search",
-        border: InputBorder.none,
-      ),
-      maxLines: 1,
-    ),
-  );
-}
-
-Widget _buildEmptyState(TextEditingController searchController) {
-  return Center(
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+  Widget _buildTopBar() {
+    return Row(
       children: [
-        Icon(Icons.inventory_2_outlined, size: 80, color: Colors.grey[300]),
-        SizedBox(height: 16),
-        Text(
-          searchController.text.isEmpty
-              ? 'No products yet'
-              : 'No products found',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-            color: Colors.grey[600],
+        Expanded(
+          child: Row(
+            spacing: 10,
+            children: [
+              const CircleAvatar(
+                backgroundImage: AssetImage("assets/images/image_1.jpeg"),
+                radius: 25,
+              ),
+              const Text(
+                "Welcome Sarah",
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+              ),
+            ],
           ),
         ),
-        SizedBox(height: 8),
-        Text(
-          searchController.text.isEmpty
-              ? 'Add your first product'
-              : 'Try different keywords',
-          style: TextStyle(color: Colors.grey[500]),
+        Row(
+          children: [
+            Card(
+              color: AppColors.secondary,
+              child: Badge(
+                child: IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.notifications),
+                ),
+              ),
+            ),
+            const SizedBox(width: 5),
+            Card(
+              color: AppColors.secondary,
+              child: IconButton(
+                onPressed: () {},
+                icon: const Icon(Icons.settings),
+              ),
+            ),
+          ],
         ),
       ],
-    ),
-  );
+    );
+  }
+
+  Widget _buildSearchBarRow() {
+    return Row(
+      children: [
+        Expanded(child: _searchBar()),
+        const SizedBox(width: 5),
+        Card(
+          color: AppColors.secondary,
+          child: IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.filter_list),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _searchBar() {
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.secondary,
+        border: Border.all(width: 2, color: AppColors.myGrey),
+        borderRadius: BorderRadius.circular(25),
+      ),
+      child: TextFormField(
+        controller: _searchController,
+        textAlignVertical: TextAlignVertical.center,
+        decoration: const InputDecoration(
+          prefixIcon: Icon(Icons.search),
+          hintText: "Search",
+          border: InputBorder.none,
+        ),
+        maxLines: 1,
+      ),
+    );
+  }
+
+  Widget _buildProductGrid() {
+    return Consumer<ProductProvider>(
+      builder: (context, provider, _) {
+        if (provider.isLoading) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        final products = provider.filteredProducts;
+
+        if (products.isEmpty) return _buildEmptyState();
+
+        return GridView.builder(
+          physics: const BouncingScrollPhysics(),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 15,
+            mainAxisSpacing: 15,
+            childAspectRatio: .75,
+          ),
+          itemCount: products.length,
+          itemBuilder: (context, index) {
+            final product = products[index];
+            return GestureDetector(
+              onTap: () => _openProductDetail(context, product),
+              child: Hero(
+                tag: product.name,
+                child: ProductCard(product: product),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Widget _buildEmptyState() {
+    final query = _searchController.text.trim();
+
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.inventory_2_outlined, size: 80, color: Colors.grey[300]),
+          const SizedBox(height: 16),
+          Text(
+            query.isEmpty ? 'No products yet' : 'No products found',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+              color: Colors.grey[600],
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            query.isEmpty ? 'Add your first product' : 'Try different keywords',
+            style: TextStyle(color: Colors.grey[500]),
+          ),
+        ],
+      ),
+    );
+  }
 }
