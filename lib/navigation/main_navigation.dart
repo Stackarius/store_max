@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:store_max/contants/colors.dart';
 import 'package:store_max/pages/add_edit_product_page.dart';
 import 'package:store_max/pages/home_page.dart';
-
-import '../pages/store_page.dart';
+import 'package:store_max/pages/profile_page.dart';
 
 class MainNavigation extends StatefulWidget {
   const MainNavigation({super.key});
@@ -15,42 +14,53 @@ class MainNavigation extends StatefulWidget {
 class _MainNavigationState extends State<MainNavigation> {
   int currentIndex = 0;
 
-  List pages = [HomePage(), StorePage()];
+  final List<Widget> pages = const [HomePage(), ProfilePage()];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBody: true,
-      body: pages[currentIndex],
+      backgroundColor: AppColors.secondary,
+      body: IndexedStack(index: currentIndex, children: pages),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: BottomNavigationBar(
-        onTap:
-            (index) => setState(() {
-              currentIndex = index;
-            }),
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: AppColors.secondary,
-        elevation: 2,
-        iconSize: 24,
-        showUnselectedLabels: false,
-        selectedFontSize: 16,
-        selectedItemColor: AppColors.primary,
-        currentIndex: currentIndex,
-        items: [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-
-          BottomNavigationBarItem(icon: Icon(Icons.store), label: "My Store"),
-        ],
-      ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppColors.yellow,
-        child: Icon(Icons.add, size: 35),
+        elevation: 6,
+        shape: const CircleBorder(),
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => AddEditProductScreen()),
+            MaterialPageRoute(
+              builder: (context) => const AddEditProductScreen(),
+            ),
           );
         },
+        child: Icon(Icons.add, size: 32, color: AppColors.primary),
       ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.only(bottom: 6),
+        child: BottomNavigationBar(
+          currentIndex: currentIndex,
+          onTap: (index) => setState(() => currentIndex = index),
+          type: BottomNavigationBarType.fixed,
+          backgroundColor: AppColors.secondary,
+          selectedItemColor: AppColors.primary,
+          unselectedItemColor: AppColors.primary.withOpacity(0.5),
+          showUnselectedLabels: false,
+          iconSize: 26,
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home_rounded),
+              label: "Home",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person_rounded),
+              label: "Profile",
+            ),
+          ],
+        ),
+      ),
+
     );
   }
 }
