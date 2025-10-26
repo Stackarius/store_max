@@ -56,7 +56,7 @@ class OnboardingPage extends StatelessWidget {
                       )
                       .animate()
                       .fadeIn(duration: 600.ms)
-                      .slideY(begin: 0.5, end: 0, curve: Curves.easeOutCubic),
+                      .slideY(begin: 0.8, end: 0, curve: Curves.easeOutCubic),
 
                   const SizedBox(height: 20),
 
