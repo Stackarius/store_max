@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
@@ -9,7 +10,14 @@ import 'provider/product_provider.dart';
 import 'utils/seed_data.dart';
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  // Ensures binding is ready before splash is shown
+  final WidgetsBinding binding = WidgetsFlutterBinding.ensureInitialized();
+
+  // Preserve native splash until setup completes
+  FlutterNativeSplash.preserve(widgetsBinding: binding);
+
+  // Lock orientation
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   // Seed the database with sample data (if empty)
   await SeedData.seedDatabase();
@@ -18,8 +26,8 @@ Future<void> main() async {
   final productProvider = ProductProvider();
   await productProvider.loadProducts();
 
-  // Lock orientation
-  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  // Remove splash AFTER setup completes
+  FlutterNativeSplash.remove();
 
   runApp(
     MultiProvider(
