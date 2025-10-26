@@ -72,7 +72,7 @@ class OnboardingPage extends StatelessWidget {
                       .fadeIn(duration: 700.ms, delay: 300.ms)
                       .slideY(begin: 0.5, end: 0, curve: Curves.easeOutCubic),
 
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 50),
 
                   // PROCEED BUTTON
                   GestureDetector(
@@ -135,7 +135,7 @@ class OnboardingPage extends StatelessWidget {
                         curve: Curves.easeInOut,
                       ),
 
-                  const SizedBox(height: 50),
+                  const SizedBox(height: 80),
                 ],
               ),
             ),
