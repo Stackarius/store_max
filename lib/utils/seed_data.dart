@@ -4,43 +4,38 @@ import 'package:store_max/models/product.dart';
 class SeedData {
   static final DatabaseHelper _dbHelper = DatabaseHelper.instance;
 
-  // 6 Essential T-Shirts for Demo
+  // sample TShirts
   static final List<Product> sampleTShirts = [
     Product(
       name: 'Black Yahweh Neck T-Shirt',
       quantity: 50,
       price: 3500,
-      imagePath: 'assets/images/tshirt_1.jpeg',
+      imagePath: null,
     ),
     Product(
       name: 'Colored T-Shirt',
       quantity: 45,
       price: 3500,
-      imagePath: 'assets/images/tshirt_2.jpeg',
+      imagePath: null,
     ),
-    Product(
-      name: 'Taipa T-Shirt',
-      quantity: 15,
-      price: 8500,
-      imagePath: 'assets/images/tshirt_8.jpeg',
-    ),
+    Product(name: 'Taipa T-Shirt', quantity: 15, price: 8500, imagePath: null),
     Product(
       name: 'Black Trefoil T-Shirt',
       quantity: 12,
       price: 8500,
-      imagePath: 'assets/images/tshirt_4.jpg',
+      imagePath: null,
     ),
     Product(
       name: 'Black Plain Shirt',
       quantity: 25,
       price: 6500,
-      imagePath: 'assets/images/tshirt_5.jpg',
+      imagePath: null,
     ),
     Product(
       name: 'Taipa Black Tee',
       quantity: 22,
       price: 6000,
-      imagePath: 'assets/images/tshirt_6.jpg',
+      imagePath: null,
     ),
   ];
 
