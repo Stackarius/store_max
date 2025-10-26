@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:store_max/contants/colors.dart';
 import 'package:store_max/models/product.dart';
@@ -6,6 +8,7 @@ import '../pages/product_detail.dart';
 
 class ProductCard extends StatelessWidget {
   final Product product;
+
   const ProductCard({super.key, required this.product});
 
   @override
@@ -46,8 +49,8 @@ class ProductCard extends StatelessWidget {
 
                   child:
                       product.imagePath != null && product.imagePath!.isNotEmpty
-                          ? Image.asset(
-                            product.imagePath!,
+                          ? Image.file(
+                            File(product.imagePath!),
                             fit: BoxFit.cover,
                             errorBuilder:
                                 (context, error, stackTrace) => const Center(
