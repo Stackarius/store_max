@@ -40,6 +40,7 @@ dependencies:
   image_picker: ^1.2.0
   google_fonts: ^6.3.2
   flutter_animate: ^4.5.2
+  flutter_native_splash: ^2.4.1
 
 dev_dependencies:
   flutter_test:
@@ -92,3 +93,10 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+flutter_native_splash:
+  color: "#FCEB02" # Deep navy background
+  image: assets/images/store.png
+  android_12:
+    image: assets/images/store.png
+    icon_background_color: "#071933"
+  web: false
