@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'dart:io';
 import '../contants/colors.dart';
-import '../db/database_helper.dart';
 import '../models/product.dart';
+import '../provider/product_provider.dart';
 
 class AddEditProductScreen extends StatefulWidget {
   final Product? product;
@@ -20,7 +21,6 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
   final _nameController = TextEditingController();
   final _quantityController = TextEditingController();
   final _priceController = TextEditingController();
-  final DatabaseHelper _dbHelper = DatabaseHelper.instance;
   final ImagePicker _picker = ImagePicker();
 
   String? _imagePath;
@@ -70,8 +70,9 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
 
   Future<void> _saveProduct() async {
     if (!_formKey.currentState!.validate()) return;
-
     setState(() => _isLoading = true);
+
+    final provider = Provider.of<ProductProvider>(context, listen: false);
 
     try {
       final product = Product(
@@ -83,9 +84,9 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
       );
 
       if (_isEditMode) {
-        await _dbHelper.update(product);
+        await provider.updateProduct(product);
       } else {
-        await _dbHelper.create(product);
+        await provider.addProduct(product);
       }
 
       if (!mounted) return;
@@ -101,20 +102,18 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
         ),
       );
 
-      Navigator.pop(context, true);
+      Navigator.pop(context, true); // trigger refresh when returning
     } catch (e) {
-      if (!mounted) return;
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Error saving product: $e'),
-          backgroundColor: Colors.red,
-        ),
-      );
-    } finally {
       if (mounted) {
-        setState(() => _isLoading = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error saving product: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
       }
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
     }
   }
 
