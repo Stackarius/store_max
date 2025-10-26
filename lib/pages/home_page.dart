@@ -180,7 +180,7 @@ class _HomePageState extends State<HomePage> {
             return GestureDetector(
               onTap: () => _openProductDetail(context, product),
               child: Hero(
-                tag: product.name,
+                tag: 'product-${product.id ?? product.name}',
                 child: ProductCard(product: product),
               ),
             );
